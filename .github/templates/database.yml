@@ -1,0 +1,6 @@
+test:
+  adapter: "sqlite3"
+  host: "localhost"
+  username: "redmine"
+  database: "sqlite/redmine.db"
+  encoding: "utf8"

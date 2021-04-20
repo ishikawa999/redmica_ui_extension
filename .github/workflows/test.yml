@@ -19,7 +19,9 @@ jobs:
       - name: Move repository directory
         run: cp -r /__w/redmica_ui_extension/redmica_ui_extension /usr/src/redmine/plugins; ls /usr/src/redmine/plugins/redmica_ui_extension
       - name: Setup
-        run: bundle install
+        run: |
+          cp /usr/src/redmine/plugins/redmica_ui_extension/.github/templates/database.yml /usr/src/redmine/config/database.yml
+          bundle install
       - name: Test RedMica
         run: RAILS_ENV=test bundle exec rake test
       - name: Test RedMica UI Extension plugin

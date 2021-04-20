@@ -18,19 +18,8 @@ jobs:
       - uses: actions/checkout@v2
       - name: Move repository directory
         run: cp -r /__w/redmica_ui_extension/redmica_ui_extension /usr/src/redmine/plugins; ls /usr/src/redmine/plugins/redmica_ui_extension
-      - name: Cache gems
-        uses: actions/cache@v2
-        with:
-          path: /usr/src/redmine/vendor/bundle
-          key: ${{ matrix.redmica }}-postgres-${{ hashFiles('**/Gemfile') }}
-          restore-keys: |
-            ${{ matrix.redmica }}-postgres-
-            ${{ matrix.redmica }}-
       - name: Setup
-        run: |
-          bundle install --path vendor/bundle
-          bundle update
-          bundle exec rake db:migrate
+        run: bundle install
       - name: Test RedMica
         run: RAILS_ENV=test bundle exec rake test
       - name: Test RedMica UI Extension plugin

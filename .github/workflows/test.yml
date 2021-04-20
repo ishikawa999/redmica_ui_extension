@@ -22,6 +22,7 @@ jobs:
         run: |
           cp /usr/src/redmine/plugins/redmica_ui_extension/.github/templates/database.yml /usr/src/redmine/config/database.yml
           bundle install
+          bundle exec rake db:create db:migrate
       - name: Test RedMica
         run: RAILS_ENV=test bundle exec rake test
       - name: Test RedMica UI Extension plugin

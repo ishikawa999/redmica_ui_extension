@@ -9,6 +9,9 @@ jobs:
     runs-on: ubuntu-latest
     container:
       image: redmica/redmica:${{ matrix.redmica }}
+    defaults:
+      run:
+        working-directory: /usr/src/redmine
     steps:
       - name: check
         run: pwd; ls /usr/src/redmine

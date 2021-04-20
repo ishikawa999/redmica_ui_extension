@@ -45,15 +45,12 @@ class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
                 )
   options[:browser] = :remote
   options[:url] = "http://chrome:4444/wd/hub"
-  Capybara.server_host = 'container'
-  Capybara.server_port = 3000
   driven_by(
     :selenium, using: :chrome, screen_size: [1024, 900],
     options: options
   )
 
   setup do
-    Capybara.app_host = "http://#{Capybara.server_host}:#{Capybara.server_port}"
     # Allow defining a custom app host (useful when using a remote Selenium hub)
     if ENV['CAPYBARA_APP_HOST']
       Capybara.configure do |config|

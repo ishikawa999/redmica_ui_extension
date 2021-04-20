@@ -9,6 +9,14 @@ jobs:
     runs-on: ubuntu-latest
     container:
       image: redmica/redmica:${{ matrix.redmica }}
+      env:
+        RAILS_ENV: test
+    services:
+      chrome:
+        image: selenium/standalone-chrome-debug:3.141.59-europium
+        ports:
+          - 4444:4444
+          - 5900:5900
     defaults:
       run:
         working-directory: /usr/src/redmine
@@ -19,11 +27,12 @@ jobs:
       - name: Setup
         run: |
           cp /usr/src/redmine/plugins/redmica_ui_extension/.github/templates/database.yml /usr/src/redmine/config/database.yml
+          cp /usr/src/redmine/plugins/redmica_ui_extension/.github/templates/application_system_test_case.rb /usr/src/redmine/test/application_system_test_case.rb
           apt update
           apt install -y build-essential
           bundle install --with test
           bundle exec rake db:create db:migrate RAILS_ENV=test
-      - name: Test RedMica
-        run: RAILS_ENV=test bundle exec rake test
+      #- name: Test RedMica
+      #  run: RAILS_ENV=test bundle exec rake test
       - name: Test RedMica UI Extension plugin
         run: RAILS_ENV=test bundle exec rake test TEST=plugins/redmica_ui_extension/test

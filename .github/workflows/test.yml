@@ -30,6 +30,7 @@ jobs:
           cp /usr/src/redmine/plugins/redmica_ui_extension/.github/templates/application_system_test_case.rb /usr/src/redmine/test/application_system_test_case.rb
           apt update
           apt install -y build-essential
+          rm /usr/src/redmine/config/additional_environment.rb
           bundle install --with test
           bundle exec rake db:create db:migrate RAILS_ENV=test
       #- name: Test RedMica

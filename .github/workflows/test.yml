@@ -1,0 +1,36 @@
+name: Test
+on: [push, pull_request, workflow_dispatch]
+jobs:
+  test-with-postgres:
+    strategy:
+      fail-fast: false
+      matrix:
+        redmica: [1.2]
+    runs-on: ubuntu-latest
+    container:
+      image: redmica/redmica:${{ matrix.redmica }}
+    steps:
+      - name: check
+        run: pwd; ls /usr/src/redmine
+      - uses: actions/checkout@v2
+        with:
+          path: /usr/src/redmine/plugins/redmica_ui_extension
+      - name: Cache gems
+        uses: actions/cache@v2
+        with:
+          path: vendor/bundle
+          key: ${{ matrix.redmica }}-postgres-${{ hashFiles('**/Gemfile') }}
+          restore-keys: |
+            ${{ matrix.redmica }}-postgres-
+            ${{ matrix.redmica }}-
+      - name: Setup
+        run: |
+          cp ./plugins/redmica_ui_extension/.github/templates/database.postgres.yml ./config/database.yml
+          bundle install --path vendor/bundle
+          bundle update
+          bundle exec rake db:create
+          bundle exec rake db:migrate
+      - name: Test RedMica
+        run: RAILS_ENV=test bundle exec rake test
+      - name: Test RedMica UI Extension plugin
+        run: RAILS_ENV=test bundle exec rake test TEST=plugins/redmica_ui_extension/test

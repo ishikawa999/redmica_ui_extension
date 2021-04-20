@@ -13,14 +13,13 @@ jobs:
       run:
         working-directory: /usr/src/redmine
     steps:
-      - name: check
-        run: pwd; ls /usr/src/redmine
       - uses: actions/checkout@v2
       - name: Move repository directory
         run: cp -r /__w/redmica_ui_extension/redmica_ui_extension /usr/src/redmine/plugins; ls /usr/src/redmine/plugins/redmica_ui_extension
       - name: Setup
         run: |
           cp /usr/src/redmine/plugins/redmica_ui_extension/.github/templates/database.yml /usr/src/redmine/config/database.yml
+          rm /usr/src/redmine/.bundle/config
           bundle install
           bundle exec rake db:create db:migrate RAILS_ENV=test
       - name: Test RedMica

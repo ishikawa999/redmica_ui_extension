@@ -5,7 +5,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        redmica: [1.2]
+        redmica: [1.2, 1.1]
     runs-on: ubuntu-latest
     container:
       image: redmica/redmica:${{ matrix.redmica }}

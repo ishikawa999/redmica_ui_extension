@@ -29,7 +29,7 @@ jobs:
           - 5432:5432
         options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
     steps:
-      - uses: ./plugins/redmica_ui_extension/.github/actions/run-test/
+      - uses: .github/actions/run-test/
         with:
           redmica_branch: ${{matrix.redmica_branch}}
           db: postgres
@@ -59,7 +59,7 @@ jobs:
         ports:
           - 3306:3306
     steps:
-      - uses: ./plugins/redmica_ui_extension/.github/actions/run-test/
+      - uses: .github/actions/run-test/
         with:
           redmica_branch: ${{matrix.redmica_branch}}
           db: mysql
@@ -83,7 +83,7 @@ jobs:
           - 4444:4444
           - 5900:5900
     steps:
-      - uses: ./plugins/redmica_ui_extension/.github/actions/run-test/
+      - uses: .github/actions/run-test/
         with:
           redmica_branch: ${{matrix.redmica_branch}}
           db: sqlite

@@ -12,7 +12,6 @@ runs:
     run:
       working-directory: /usr/src/redmine
   steps:
-    - uses: actions/checkout@v2
     - name: Setup
       run: ./plugins/redmica_ui_extension/setup-redmica.sh ${{inputs.redmica_branch}} ${{inputs.db}}
     - name: Test RedMica UI Extension plugin

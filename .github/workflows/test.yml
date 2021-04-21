@@ -1,12 +1,11 @@
 name: Test
 on: [push, pull_request, workflow_dispatch]
 jobs:
-  test:
+  test-postgres:
     strategy:
       fail-fast: false
       matrix:
         redmica_branch: [master, released-latest]
-        db: [postgres, mysql, sqlite]
     runs-on: ubuntu-latest
     container:
       image: redmica/redmica:latest
@@ -20,8 +19,7 @@ jobs:
         ports:
           - 4444:4444
           - 5900:5900
-      if: matrix.db == 'postgres' || matrix.db == 'mysql'
-      postgres_host:
+      db:
         image: postgres:11
         env:
           LANG: C.UTF-8
@@ -30,20 +28,65 @@ jobs:
         ports:
           - 5432:5432
         options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
-      mysql_host:
+    steps:
+      - uses: ./plugins/redmica_ui_extension/.github/actions/run-test/
+        with:
+          redmica_branch: ${{matrix.redmica_branch}}
+          db: postgres
+        working-directory: /usr/src/redmine
+
+  test-mysql:
+    strategy:
+      fail-fast: false
+      matrix:
+        redmica_branch: [master, released-latest]
+    runs-on: ubuntu-latest
+    container:
+      image: redmica/redmica:latest
+      env:
+        RAILS_ENV: test
+      ports:
+        - 3000:3000
+    services:
+      chrome:
+        image: selenium/standalone-chrome-debug:3.141.59-europium
+        ports:
+          - 4444:4444
+          - 5900:5900
+      db:
         image: mysql:5
         env:
           MYSQL_ROOT_PASSWORD: password
         ports:
           - 3306:3306
-    defaults:
-      run:
-        working-directory: /usr/src/redmine
     steps:
-      - uses: actions/checkout@v2
-      - name: Setup
-        run: /usr/src/redmine/plugins/redmica_ui_extension/setup-redmica.sh ${{matrix.redmica_branch}} mysql
-      - name: Test RedMica UI Extension plugin
-        run: RAILS_ENV=test bundle exec rake test TEST=plugins/redmica_ui_extension/test
-      - name: Test RedMica
-        run: RAILS_ENV=test bundle exec rake test
+      - uses: ./plugins/redmica_ui_extension/.github/actions/run-test/
+        with:
+          redmica_branch: ${{matrix.redmica_branch}}
+          db: mysql
+        working-directory: /usr/src/redmine
+
+  test-sqlite:
+    strategy:
+      fail-fast: false
+      matrix:
+        redmica_branch: [master, released-latest]
+    runs-on: ubuntu-latest
+    container:
+      image: redmica/redmica:latest
+      env:
+        RAILS_ENV: test
+      ports:
+        - 3000:3000
+    services:
+      chrome:
+        image: selenium/standalone-chrome-debug:3.141.59-europium
+        ports:
+          - 4444:4444
+          - 5900:5900
+    steps:
+      - uses: ./plugins/redmica_ui_extension/.github/actions/run-test/
+        with:
+          redmica_branch: ${{matrix.redmica_branch}}
+          db: sqlite
+        working-directory: /usr/src/redmine

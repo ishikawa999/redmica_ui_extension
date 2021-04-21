@@ -1,0 +1,50 @@
+name: Run test
+
+inputs:
+  redmica_branch:
+    required: true
+  db:
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - uses: actions/checkout@v2
+    - name: Setup
+      run: ./plugins/redmica_ui_extension/setup-redmica.sh ${{inputs.redmica_branch}} ${{inputs.db}}
+    - name: Test RedMica UI Extension plugin
+      run: rake test TEST=plugins/redmica_ui_extension/test
+    - name: Test RedMica
+      run: rake test
+    - uses: actions/checkout@v2
+    - name: Replace RedMica code
+      if: $inputs.redmica_branch != 'released-latest'
+      run: |
+        set +e
+        rm -rf ./* > /dev/null
+        rm -rf ./.* 2> /dev/null
+        wget --no-check-certificate wget --no-check-certificate https://github.com/redmica/redmica/archive/${{inputs.redmica_branch}}.tar.gz;
+        tar -xf master.tar.gz --strip-components=1
+        set -e
+    - name: Move RedMica UI Extension plugin directory
+      run: cp -r /__w/redmica_ui_extension/redmica_ui_extension ./plugins
+    - name: Setup
+      run: |
+        cp ./plugins/redmica_ui_extension/.github/templates/database-${{inputs.db}}.yml ./config/database.yml
+        cp ./plugins/redmica_ui_extension/.github/templates/application_system_test_case.rb ./test/application_system_test_case.rb
+
+        # PDFのサムネイル作成テストを成功させるため
+        sed -i 's/^.*policy.*coder.*none.*PDF.*//' /etc/ImageMagick-6/policy.xml
+
+        # DB側のログを表示しないため(additional_environment.rbでログを標準出力に出している)
+        rm -f ./config/additional_environment.rb
+
+        apt update
+        apt install -y build-essential
+        bundle install --with test
+        bundle update
+        bundle exec rake db:create db:migrate RAILS_ENV=test
+    - name: Test RedMica UI Extension plugin
+      run: rake test TEST=plugins/redmica_ui_extension/test
+    - name: Test RedMica
+      run: rake test

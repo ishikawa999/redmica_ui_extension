@@ -1,11 +1,12 @@
 name: Test
 on: [push, pull_request, workflow_dispatch]
 jobs:
-  test-with-postgres:
+  test:
     strategy:
       fail-fast: false
       matrix:
-        redmica: [master, released-latest]
+        redmica_branch: [master, released-latest]
+        db: [postgres, mysql, sqlite]
     runs-on: ubuntu-latest
     container:
       image: redmica/redmica:latest
@@ -19,36 +20,31 @@ jobs:
         ports:
           - 4444:4444
           - 5900:5900
+      if: matrix.db == 'postgres'
+      db:
+        image: postgres:11
+        env:
+          LANG: C.UTF-8
+          POSTGRES_INITDB_ARGS: --locale=C.UTF-8
+          POSTGRES_PASSWORD: postgres
+        ports:
+          - 5432:5432
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+      if: matrix.db == 'mysql'
+      db:
+        image: mysql:5
+        env:
+          MYSQL_ROOT_PASSWORD: password
+        ports:
+          - 3306:3306
     defaults:
       run:
         working-directory: /usr/src/redmine
     steps:
       - uses: actions/checkout@v2
-      - name: Replace RedMica directory
-        if: matrix.redmica == 'master'
-        run: |
-          set +e
-          rm -rf /usr/src/redmine/* > /dev/null
-          rm -rf /usr/src/redmine/.* 2> /dev/null
-          wget --no-check-certificate wget --no-check-certificate https://github.com/redmica/redmica/archive/master.tar.gz;
-          tar -xf master.tar.gz --strip-components=1
-          set -e
-      - name: Move repository directory
-        run: cp -r /__w/redmica_ui_extension/redmica_ui_extension /usr/src/redmine/plugins
       - name: Setup
-        run: |
-          cp /usr/src/redmine/plugins/redmica_ui_extension/.github/templates/database.yml /usr/src/redmine/config/database.yml
-          cp /usr/src/redmine/plugins/redmica_ui_extension/.github/templates/application_system_test_case.rb /usr/src/redmine/test/application_system_test_case.rb
-          # PDFのサムネイル作成テストを成功させるため
-          sed -i 's/^.*policy.*coder.*none.*PDF.*//' /etc/ImageMagick-6/policy.xml
-          # DB側のログを表示しないため(additional_environment.rbでログを標準出力に出している)
-          rm -f /usr/src/redmine/config/additional_environment.rb
-          apt update
-          apt install -y build-essential
-          bundle install --with test
-          bundle update
-          bundle exec rake db:create db:migrate RAILS_ENV=test
+        run: /usr/src/redmine/plugins/redmica_ui_extension/setup-redmica.sh ${{matrix.redmica_branch}} mysql
       - name: Test RedMica UI Extension plugin
         run: RAILS_ENV=test bundle exec rake test TEST=plugins/redmica_ui_extension/test
-      #- name: Test RedMica
-      #  run: RAILS_ENV=test bundle exec rake test
+      - name: Test RedMica
+        run: RAILS_ENV=test bundle exec rake test

@@ -8,6 +8,9 @@ inputs:
 
 runs:
   using: composite
+  defaults:
+    run:
+      working-directory: /usr/src/redmine
   steps:
     - uses: actions/checkout@v2
     - name: Setup

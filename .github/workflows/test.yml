@@ -33,7 +33,6 @@ jobs:
         with:
           redmica_branch: ${{matrix.redmica_branch}}
           db: postgres
-        working-directory: /usr/src/redmine
 
   test-mysql:
     strategy:
@@ -64,7 +63,6 @@ jobs:
         with:
           redmica_branch: ${{matrix.redmica_branch}}
           db: mysql
-        working-directory: /usr/src/redmine
 
   test-sqlite:
     strategy:
@@ -89,4 +87,3 @@ jobs:
         with:
           redmica_branch: ${{matrix.redmica_branch}}
           db: sqlite
-        working-directory: /usr/src/redmine

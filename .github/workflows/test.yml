@@ -11,6 +11,8 @@ jobs:
       image: redmica/redmica:${{ matrix.redmica }}
       env:
         RAILS_ENV: test
+      ports:
+        - 3000:3000
     services:
       chrome:
         image: selenium/standalone-chrome-debug:3.141.59-europium

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # Redmine - project management software
-# Copyright (C) 2006-2020  Jean-Philippe Lang
+# Copyright (C) 2006-2021  Jean-Philippe Lang
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -37,7 +37,7 @@ class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
                   'goog:chromeOptions' => {
                     'args' => GOOGLE_CHROME_OPTS_ARGS,
                     'prefs' => {
-                      'download.default_directory' => DOWNLOADS_PATH,
+                      'download.default_directory' => DOWNLOADS_PATH.gsub(File::SEPARATOR, File::ALT_SEPARATOR || File::SEPARATOR),
                       'download.prompt_for_download' => false,
                       'plugins.plugins_disabled' => ["Chrome PDF Viewer"]
                     }
@@ -45,12 +45,15 @@ class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
                 )
   options[:browser] = :remote
   options[:url] = "http://chrome:4444/wd/hub"
+  Capybara.server_host = IPSocket.getaddress(Socket.gethostname)
+  Capybara.server_port = 3000
   driven_by(
     :selenium, using: :chrome, screen_size: [1024, 900],
     options: options
   )
 
   setup do
+    Capybara.app_host = "http://#{Capybara.server_host}:#{Capybara.server_port}"
     # Allow defining a custom app host (useful when using a remote Selenium hub)
     if ENV['CAPYBARA_APP_HOST']
       Capybara.configure do |config|

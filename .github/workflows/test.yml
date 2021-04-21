@@ -25,7 +25,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Move repository directory
-        run: cp -r /__w/redmica_ui_extension/redmica_ui_extension /usr/src/redmine/plugins; ls /usr/src/redmine/plugins/redmica_ui_extension
+        run: cp -r /__w/redmica_ui_extension/redmica_ui_extension /usr/src/redmine/plugins
       - name: Setup
         run: |
           cp /usr/src/redmine/plugins/redmica_ui_extension/.github/templates/database.yml /usr/src/redmine/config/database.yml
@@ -35,7 +35,7 @@ jobs:
           rm /usr/src/redmine/config/additional_environment.rb
           bundle install --with test
           bundle exec rake db:create db:migrate RAILS_ENV=test
-      #- name: Test RedMica
-      #  run: RAILS_ENV=test bundle exec rake test
+      - name: Test RedMica
+        run: RAILS_ENV=test bundle exec rake test
       - name: Test RedMica UI Extension plugin
         run: RAILS_ENV=test bundle exec rake test TEST=plugins/redmica_ui_extension/test

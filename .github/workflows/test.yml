@@ -42,6 +42,7 @@ jobs:
           apt update
           apt install -y build-essential
           bundle install --with test
+          bundle update
           bundle exec rake db:create db:migrate RAILS_ENV=test
       - name: Test RedMica UI Extension plugin
         run: RAILS_ENV=test bundle exec rake test TEST=plugins/redmica_ui_extension/test

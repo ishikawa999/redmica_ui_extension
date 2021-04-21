@@ -27,7 +27,10 @@ jobs:
       - name: Replace RedMica directory
         if: matrix.redmica == 'master'
         run: |
-          rm -rf /usr/src/redmine/*
+          set +e
+          rm -rf /usr/src/redmine/* > /dev/null
+          rm -rf /usr/src/redmine/.* 2> /dev/null
+          set -e
           wget --no-check-certificate wget --no-check-certificate https://github.com/redmica/redmica/archive/master.tar.gz;
           tar -xf master.tar.gz --strip-components=1;
       - name: Move repository directory

@@ -28,9 +28,12 @@ jobs:
         ports:
           - 5432:5432
         options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+    defaults:
+      run:
+        working-directory: /usr/src/redmine
     steps:
       - uses: actions/checkout@v2
-      - uses: ./.github/actions/run-test/
+      - uses: /__w/redmica_ui_extension/redmica_ui_extension/.github/actions/run-test/
         with:
           redmica_branch: ${{matrix.redmica_branch}}
           db: postgres
@@ -59,9 +62,12 @@ jobs:
           MYSQL_ROOT_PASSWORD: password
         ports:
           - 3306:3306
+    defaults:
+      run:
+        working-directory: /usr/src/redmine
     steps:
       - uses: actions/checkout@v2
-      - uses: ./.github/actions/run-test/
+      - uses: /__w/redmica_ui_extension/redmica_ui_extension/.github/actions/run-test/
         with:
           redmica_branch: ${{matrix.redmica_branch}}
           db: mysql
@@ -84,9 +90,12 @@ jobs:
         ports:
           - 4444:4444
           - 5900:5900
+    defaults:
+      run:
+        working-directory: /usr/src/redmine
     steps:
       - uses: actions/checkout@v2
-      - uses: ./.github/actions/run-test/
+      - uses: /__w/redmica_ui_extension/redmica_ui_extension/.github/actions/run-test/
         with:
           redmica_branch: ${{matrix.redmica_branch}}
           db: sqlite

@@ -27,8 +27,9 @@ jobs:
       - name: Replace RedMica directory
         if: matrix.redmica == 'master'
         run: |
-          rm -rf /src/src/redmine
-          git clone --depth=1 https://github.com/redmica/redmica.git redmine;
+          rm -rf /usr/src/redmine/*
+          wget --no-check-certificate wget --no-check-certificate https://github.com/redmica/redmica/archive/master.tar.gz;
+          tar -xf master.tar.gz --strip-components=1;
       - name: Move repository directory
         run: cp -r /__w/redmica_ui_extension/redmica_ui_extension /usr/src/redmine/plugins
       - name: Setup

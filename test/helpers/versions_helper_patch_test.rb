@@ -6,7 +6,7 @@ class VersionsHelperPatchTest < Redmine::HelperTest
   include VersionsHelper
   fixtures :projects, :enabled_modules,
            :users, :members, :roles, :member_roles,
-           :trackers, :projects_trackers, :enumerations, :issue_statuses
+           :trackers, :projects_trackers, :enumerations, :issue_statuses, :versions
 
   def test_issues_burndown_chart_data_should_return_chart_data
     # 3 days ago

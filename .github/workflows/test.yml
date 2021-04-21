@@ -31,10 +31,10 @@ jobs:
           rm -rf /usr/src/redmine/* > /dev/null
           rm -rf /usr/src/redmine/.* 2> /dev/null
           wget --no-check-certificate wget --no-check-certificate https://github.com/redmica/redmica/archive/master.tar.gz;
-          tar -xf master.tar.gz --strip-components=1;
+          tar -xf master.tar.gz --strip-components=1
           set -e
-          ls;
-          cat Gemfile;
+          ls
+          cat Gemfile
       - name: Move repository directory
         run: cp -r /__w/redmica_ui_extension/redmica_ui_extension /usr/src/redmine/plugins
       - name: Setup
@@ -52,5 +52,5 @@ jobs:
           bundle exec rake db:create db:migrate RAILS_ENV=test
       - name: Test RedMica UI Extension plugin
         run: RAILS_ENV=test bundle exec rake test TEST=plugins/redmica_ui_extension/test
-      - name: Test RedMica
-        run: RAILS_ENV=test bundle exec rake test
+      #- name: Test RedMica
+      #  run: RAILS_ENV=test bundle exec rake test

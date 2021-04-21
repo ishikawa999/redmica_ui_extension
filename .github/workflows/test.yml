@@ -5,10 +5,10 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        redmica: [1.2, 1.1]
+        redmica: [master, released-latest]
     runs-on: ubuntu-latest
     container:
-      image: redmica/redmica:${{ matrix.redmica }}
+      image: redmica/redmica:latest
       env:
         RAILS_ENV: test
       ports:
@@ -24,18 +24,26 @@ jobs:
         working-directory: /usr/src/redmine
     steps:
       - uses: actions/checkout@v2
+      - name: Replace RedMica directory
+        if: matrix.redmica == 'master'
+        run: |
+          rm -rf /src/src/redmine
+          git clone --depth=1 https://github.com/redmica/redmica.git redmine;
       - name: Move repository directory
         run: cp -r /__w/redmica_ui_extension/redmica_ui_extension /usr/src/redmine/plugins
       - name: Setup
         run: |
           cp /usr/src/redmine/plugins/redmica_ui_extension/.github/templates/database.yml /usr/src/redmine/config/database.yml
           cp /usr/src/redmine/plugins/redmica_ui_extension/.github/templates/application_system_test_case.rb /usr/src/redmine/test/application_system_test_case.rb
+          # PDFのサムネイル作成テストを成功させるため
+          sed -i 's/^.*policy.*coder.*none.*PDF.*//' /etc/ImageMagick-6/policy.xml
+          # DB側のログを表示しないため
+          rm /usr/src/redmine/config/additional_environment.rb
           apt update
           apt install -y build-essential
-          rm /usr/src/redmine/config/additional_environment.rb
           bundle install --with test
           bundle exec rake db:create db:migrate RAILS_ENV=test
-      - name: Test RedMica
-        run: RAILS_ENV=test bundle exec rake test
       - name: Test RedMica UI Extension plugin
         run: RAILS_ENV=test bundle exec rake test TEST=plugins/redmica_ui_extension/test
+      - name: Test RedMica
+        run: RAILS_ENV=test bundle exec rake test

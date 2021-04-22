@@ -9,22 +9,15 @@ jobs:
     runs-on: ubuntu-latest
     container:
       image: redmica/redmica:latest
-      ports:
-        - 3000:3000
     services:
       chrome:
         image: selenium/standalone-chrome-debug:3.141.59-europium
-        ports:
-          - 4444:4444
-          - 5900:5900
       db:
         image: postgres:11
         env:
           LANG: C.UTF-8
           POSTGRES_INITDB_ARGS: --locale=C.UTF-8
           POSTGRES_PASSWORD: postgres
-        ports:
-          - 5432:5432
         options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
     defaults:
       run:
@@ -46,20 +39,13 @@ jobs:
     runs-on: ubuntu-latest
     container:
       image: redmica/redmica:latest
-      ports:
-        - 3000:3000
     services:
       chrome:
         image: selenium/standalone-chrome-debug:3.141.59-europium
-        ports:
-          - 4444:4444
-          - 5900:5900
       db:
         image: mysql:5
         env:
           MYSQL_ROOT_PASSWORD: password
-        ports:
-          - 3306:3306
     defaults:
       run:
         working-directory: /usr/src/redmine
@@ -80,14 +66,9 @@ jobs:
     runs-on: ubuntu-latest
     container:
       image: redmica/redmica:latest
-      ports:
-        - 3000:3000
     services:
       chrome:
         image: selenium/standalone-chrome-debug:3.141.59-europium
-        ports:
-          - 4444:4444
-          - 5900:5900
     defaults:
       run:
         working-directory: /usr/src/redmine

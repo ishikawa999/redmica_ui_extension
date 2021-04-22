@@ -4,6 +4,7 @@ redmica_branch=$1
 database=$2
 
 # Replace RedMica code to master branch code
+# TODO: これで入れ替えて動かなくなったら独自でDockerfileを書く
 if [$redmica_branch = 'master']; then
   set +e
   rm -rf /usr/src/redmine/* > /dev/null
@@ -14,7 +15,7 @@ if [$redmica_branch = 'master']; then
 fi
 
 cp -r /__w/redmica_ui_extension/redmica_ui_extension /usr/src/redmine/plugins
-# cp /usr/src/redmine/plugins/redmica_ui_extension/.github/templates/database-$database.yml /usr/src/redmine/config/database.yml
+cp /usr/src/redmine/plugins/redmica_ui_extension/.github/templates/database-$database.yml /usr/src/redmine/config/database.yml
 cp /usr/src/redmine/plugins/redmica_ui_extension/.github/templates/application_system_test_case.rb /usr/src/redmine/test/application_system_test_case.rb
 
 # PDFのサムネイル作成テストを成功させるため

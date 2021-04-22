@@ -50,6 +50,9 @@ jobs:
       image: redmica/redmica:latest
       env:
         RAILS_ENV: test
+        REDMINE_DB_MYSQL: db
+        REDMINE_DB_PASSWORD: root
+        REDMINE_SECRET_KEY_BASE: password
       ports:
         - 3000:3000
     services:
@@ -69,6 +72,8 @@ jobs:
         working-directory: /usr/src/redmine
     steps:
       - uses: actions/checkout@v2
+      - name: check
+        run: cat /usr/src/redmine/config/database.yml
       - name: Setup
         run: chmod +x /__w/redmica_ui_extension/redmica_ui_extension/.github/setup-redmica.sh;/__w/redmica_ui_extension/redmica_ui_extension/.github/setup-redmica.sh ${{matrix.redmica_branch}} mysql
       - name: Test RedMica UI Extension plugin

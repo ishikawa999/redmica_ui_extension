@@ -12,7 +12,7 @@ if [ $redmica_branch = 'master' ]; then
   set +e
   rm -rf ./* > /dev/null
   rm -rf ./.* 2> /dev/null
-  wget --no-check-certificate https://github.com/redmica/redmica/archive/master.tar.gz
+  wget --no-check-certificate https://github.com/redmine/redmine/archive/master.tar.gz
   tar -xzf master.tar.gz --strip-components=1
   set -e
 fi

@@ -7,7 +7,9 @@ Setting.include RedmicaUiExtension::SettingPatch
 # searchable_selectbox
 require File.dirname(__FILE__) + '/lib/searchable_selectbox/hook_listener'
 require File.dirname(__FILE__) + '/lib/searchable_selectbox/my_helper_patch'
+require File.dirname(__FILE__) + '/lib/searchable_selectbox/application_helper_patch'
 MyHelper.include SearchableSelectbox::MyHelperPatch
+ApplicationHelper.include SearchableSelectbox::ApplicationHelperPatch
 
 # burndown_chart
 require File.dirname(__FILE__) + '/lib/burndown_chart/hook_listener'

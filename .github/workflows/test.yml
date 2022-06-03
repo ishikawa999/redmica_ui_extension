@@ -26,7 +26,7 @@ jobs:
       - name: Setup
         run: |
           chmod +x /__w/redmica_ui_extension/redmica_ui_extension/.github/scripts/setup-redmica.sh
-          /__w/redmica_ui_extension/redmica_ui_extension/.github/scripts/setup-redmica.sh ${{matrix.redmica_branch}} postgres /usr/src/redmine
+          /__w/redmica_ui_extension/redmica_ui_extension/.github/scripts/setup-redmica.sh ${{matrix.redmica_version}} postgres /usr/src/redmine
       - name: Test RedMica UI Extension plugin
         run: RAILS_ENV=test bundle exec rake test TEST=plugins/redmica_ui_extension/test
       - name: Test RedMica
@@ -36,7 +36,7 @@ jobs:
 #  strategy:
 #    fail-fast: false
 #    matrix:
-#      redmica_branch: [master, v2.1.0]
+#      redmica_version: [master, v2.1.0]
 #  runs-on: ubuntu-latest
 #  container:
 #    image: ruby:3.1
@@ -54,7 +54,7 @@ jobs:
 #    - name: Setup
 #      run: |
 #        chmod +x /__w/redmica_ui_extension/redmica_ui_extension/.github/scripts/setup-redmica.sh
-#        /__w/redmica_ui_extension/redmica_ui_extension/.github/scripts/setup-redmica.sh ${{matrix.redmica_branch}} mysql /usr/src/redmine
+#        /__w/redmica_ui_extension/redmica_ui_extension/.github/scripts/setup-redmica.sh ${{matrix.redmica_version}} mysql /usr/src/redmine
 #    - name: Test RedMica UI Extension plugin
 #      run: RAILS_ENV=test bundle exec rake test TEST=plugins/redmica_ui_extension/test
 #    - name: Test RedMica
@@ -64,7 +64,7 @@ jobs:
 #  strategy:
 #    fail-fast: false
 #    matrix:
-#      redmica_branch: [master, v2.1.0]
+#      redmica_version: [master, v2.1.0]
 #  runs-on: ubuntu-latest
 #  container:
 #    image: ruby:3.1
@@ -78,7 +78,7 @@ jobs:
 #    - name: Setup
 #      run: |
 #        chmod +x /__w/redmica_ui_extension/redmica_ui_extension/.github/scripts/setup-redmica.sh
-#        /__w/redmica_ui_extension/redmica_ui_extension/.github/scripts/setup-redmica.sh ${{matrix.redmica_branch}} sqlite /usr/src/redmine
+#        /__w/redmica_ui_extension/redmica_ui_extension/.github/scripts/setup-redmica.sh ${{matrix.redmica_version}} sqlite /usr/src/redmine
 #    - name: Test RedMica UI Extension plugin
 #      run: RAILS_ENV=test bundle exec rake test TEST=plugins/redmica_ui_extension/test
 #    - name: Test RedMica

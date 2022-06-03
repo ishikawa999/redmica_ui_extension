@@ -13,12 +13,13 @@ cp -r $GITHUB_WORKSPACE ./plugins
 cp ./plugins/redmica_ui_extension/.github/templates/database-$database.yml config/database.yml
 cp ./plugins/redmica_ui_extension/.github/templates/application_system_test_case.rb test/application_system_test_case.rb
 
+pwd
+
 apt-get update; \
   apt-get install -y --no-install-recommends \
     ca-certificates \
     curl \
     wget \
-    \
     bzr \
     git \
     mercurial \
@@ -26,17 +27,9 @@ apt-get update; \
     subversion \
     build-essential \
     mariadb-client \
-    \
-# we need "gsfonts" for generating PNGs of Gantt charts
-# and "ghostscript" for creating PDF thumbnails (in Redmine 4.1+)
     ghostscript \
     gsfonts \
     imagemagick \
-# grab gosu for easy step-down from root
-    gosu \
-# grab tini for signal processing and zombie killing
-    tini \
-# https://github.com/docker-library/ruby/issues/344
     shared-mime-info \
   ; \
 

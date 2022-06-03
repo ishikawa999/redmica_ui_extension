@@ -1,13 +1,13 @@
 #!/bin/bash
 
-redmica_branch=$1
+redmica_version=$1
 database=$2
 redmine_dir=$3
 
 mkdir -p $redmine_dir
 cd $redmine_dir
 pwd
-echo "https://github.com/redmica/redmica/archive/${redmica_version}.tar.gz"
+echo https://github.com/redmica/redmica/archive/$redmica_version.tar.gz
 wget -O redmine.tar.gz "https://github.com/redmica/redmica/archive/${redmica_version}.tar.gz"
 tar -xf redmine.tar.gz --strip-components=1
 

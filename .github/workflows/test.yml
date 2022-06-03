@@ -11,8 +11,8 @@ jobs:
       image: ruby:2.7
     services:
       chrome:
-        image: seleniarm/standalone-chromium:latest
-        shm_size: 256m
+        image: selenium/standalone-chrome:latest
+        options: --shm-size=256m
         ports:
           - 4444:4444
       db:

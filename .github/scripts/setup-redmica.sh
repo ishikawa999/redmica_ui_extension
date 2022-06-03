@@ -29,6 +29,9 @@ rm -f ./config/additional_environment.rb
 
 apt update
 apt install -y build-essential
+if [ $database = 'mysql' ]; then
+  apt install -y mariadb-client
+fi
 bundle install --with test
 bundle update
 bundle exec rake db:create db:migrate RAILS_ENV=test

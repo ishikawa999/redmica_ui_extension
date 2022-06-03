@@ -6,8 +6,8 @@ redmine_dir=$3
 
 mkdir -p $redmine_dir
 cd $redmine_dir
-wget -O redmine.tar.gz "https://github.com/redmica/redmica/archive/$redmica_version.tar.gz"; \
-tar -xf redmine.tar.gz --strip-components=1;
+wget -O redmine.tar.gz "https://github.com/redmica/redmica/archive/${redmica_version}.tar.gz"
+tar -xf redmine.tar.gz --strip-components=1
 
 cp -r $GITHUB_WORKSPACE ./plugins
 cp ./plugins/redmica_ui_extension/.github/templates/database-$database.yml config/database.yml

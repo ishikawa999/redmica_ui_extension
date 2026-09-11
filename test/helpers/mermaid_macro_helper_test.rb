@@ -2,7 +2,7 @@
 
 require_relative '../../../../test/test_helper'
 
-class MermaidMacroTest < Redmine::HelperTest
+class MermaidMacroHelperTest < Redmine::HelperTest
   include ApplicationHelper
   include ActionView::Helpers::TextHelper
   include ActionView::Helpers::SanitizeHelper
